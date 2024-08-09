@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import './LecturerEntry.css'
 const predefinedRoles = [
   { id: '1', name: 'Academic Coordinator' },
   { id: '2', name: 'Instructor' },

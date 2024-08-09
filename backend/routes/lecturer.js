@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const user = new User({name:`${firstName+""+lastName}`,role:"Lecturer",password:lecturerId});
+    const user = new User({name:`${firstName+" "+lastName}`,role:"Lecturer",password:lecturerId});
     await user.save();
     const lecturer = new Lecturer({ firstName, lastName, lecturerId, role });
     await lecturer.save();

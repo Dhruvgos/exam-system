@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './StudentEntry.css'
 const StudentEntry = () => {
   const [student, setStudent] = useState({ firstName: '', lastName: '', studentId: '', stage: '' });
   const [stages, setStages] = useState([]);

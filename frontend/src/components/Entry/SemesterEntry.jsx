@@ -1,6 +1,6 @@
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import './SemesterEntry.css'
 const getOrdinalSuffix = (number) => {
     const j = number % 10;
     const k = number % 100;

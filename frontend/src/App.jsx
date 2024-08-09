@@ -1,9 +1,9 @@
 
 import { useEffect ,useState} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import StudentEntry from './components/StudentEntry';
-import LecturerEntry from './components/LecturerEntry ';
-import SemesterEntry from './components/SemesterEntry';
+import StudentEntry from './components/Entry/StudentEntry';
+import LecturerEntry from './components/Entry/LecturerEntry ';
+import SemesterEntry from './components/Entry/SemesterEntry';
 import Login from './components/Login/Login';
 import AdminDashboard from './components/Navbar/AdminDashboard';
 import Home from './components/Home/Home';
