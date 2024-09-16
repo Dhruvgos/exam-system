@@ -33,7 +33,6 @@ const Login = () => {
           setIsLoggedIn(true);
           setUserRole(user.role);
           setUsername(user.name);
-          // navigate('/');
         } catch (error) {
           console.error('Error validating token:', error);
           localStorage.removeItem('token');
@@ -60,18 +59,19 @@ const Login = () => {
         const error = await response.text();
         throw new Error(`Failed to Login: ${error}`);
       }
-      // console.log(response.json())
-      const {token,user}  = await response.json();
+
+      const { token, user } = await response.json();
       console.log('Token:', token);
       console.log('User:', user);
-      if(user.role=='admin'){
-        navigate('/admin-dashboard')
-      }
-      else{
-        navigate('/teacher-dashboard')
-      }
       localStorage.setItem('token', token);
       setIsLoggedIn(true);
+      setUserRole(user.role);
+
+      if (user.role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/teacher-dashboard');
+      }
     } catch (error) {
       console.error('Error:', error);
     }

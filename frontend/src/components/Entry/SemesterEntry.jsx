@@ -1,25 +1,27 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './SemesterEntry.css'
+import './SemesterEntry.css';
+
 const getOrdinalSuffix = (number) => {
-    const j = number % 10;
-    const k = number % 100;
-    if (j === 1 && k !== 11) {
-      return `${number}st`;
-    }
-    if (j === 2 && k !== 12) {
-      return `${number}nd`;
-    }
-    if (j === 3 && k !== 13) {
-      return `${number}rd`;
-    }
-    return `${number}th`;
-  };
+  const j = number % 10;
+  const k = number % 100;
+  if (j === 1 && k !== 11) {
+    return `${number}st`;
+  }
+  if (j === 2 && k !== 12) {
+    return `${number}nd`;
+  }
+  if (j === 3 && k !== 13) {
+    return `${number}rd`;
+  }
+  return `${number}th`;
+};
 
 const SemesterEntry = () => {
-  const [semester, setSemester] = useState({ order: '', startDate: '', endDate: '' });
-  // const [error, setError] = useState(null);
+  const [semester, setSemester] = useState({ order: '', startDate: '', endDate: '', department: '' });
+  const [departments, setDepartments] = useState(['ENGINEERING', 'COMPUTER APPLICATIONS', 'SCIENCE']);
   const navigate = useNavigate();
+
   useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem('token');
@@ -38,10 +40,9 @@ const SemesterEntry = () => {
           }
 
           const user = await response.json();
-          console.log('User details:', user);
-            if(user.role!='admin') {
-              navigate('/')
-            }
+          if (user.role !== 'admin') {
+            navigate('/');
+          }
         } catch (error) {
           console.error('Error validating token:', error);
           localStorage.removeItem('token');
@@ -55,12 +56,9 @@ const SemesterEntry = () => {
     checkToken();
   }, [navigate]);
 
-  
   const handleChange = (e) => {
     setSemester({ ...semester, [e.target.name]: e.target.value });
   };
-
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,7 +73,7 @@ const SemesterEntry = () => {
       if (!response.ok) {
         throw new Error('Failed to create semester');
       }
-      setSemester({ order: '', startDate: '', endDate: '' });
+      setSemester({ order: '', startDate: '', endDate: '', department: '' });
     } catch (error) {
       console.error('Error:', error);
     }
@@ -97,7 +95,6 @@ const SemesterEntry = () => {
         name="startDate"
         value={semester.startDate}
         onChange={handleChange}
-        placeholder="Start Date"
         required
       />
       <input
@@ -105,9 +102,16 @@ const SemesterEntry = () => {
         name="endDate"
         value={semester.endDate}
         onChange={handleChange}
-        placeholder="End Date"
         required
       />
+      <select name="department" value={semester.department} onChange={handleChange} required>
+        <option value="">Select Department</option>
+        {departments.map(department => (
+          <option key={department} value={department}>
+            {department}
+          </option>
+        ))}
+      </select>
       <button type="submit">Add Semester</button>
     </form>
   );

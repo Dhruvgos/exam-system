@@ -1,51 +1,46 @@
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css'; // Import the CSS file
 import { useEffect } from 'react';
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
-    useEffect(() => {
-      const checkToken = async () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-          try {
-            const response = await fetch('http://localhost:3000/api/login', {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'auth-token': `${token}`,
-              },
-            });
-  
-            if (!response.ok) {
-              throw new Error('Token validation failed');
-            }
-  
-            const user = await response.json();
-            console.log('User details:', user);
-            if(user.role=='admin'){
-              navigate('/admin-dashboard')
-            }
-            else {
-              navigate('/teacher-dashboard')
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await fetch('http://localhost:3000/api/login', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'auth-token': `${token}`,
+            },
+          });
 
-            }
-        
-          } catch (error) {
-            console.error('Error validating token:', error);
-            localStorage.removeItem('token');
-
+          if (!response.ok) {
+            throw new Error('Token validation failed');
           }
-        }
-        else{
-          navigate('/')
-        }
-      };
-  
-      checkToken();
-    }, [navigate])
-    
 
+          const user = await response.json();
+          console.log('User details:', user);
+          if(user.role === 'admin'){
+            navigate('/admin-dashboard');
+          } else {
+            navigate('/teacher-dashboard');
+          }
+
+        } catch (error) {
+          console.error('Error validating token:', error);
+          localStorage.removeItem('token');
+        }
+      } else {
+        navigate('/');
+      }
+    };
+
+    checkToken();
+  }, [navigate]);
 
   return (
     <div className="dashboard-container">

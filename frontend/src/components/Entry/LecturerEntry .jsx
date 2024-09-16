@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LecturerEntry.css'
+import './LecturerEntry.css';
+
 const predefinedRoles = [
   { id: '1', name: 'Academic Coordinator' },
   { id: '2', name: 'Instructor' },
-  { id: '3', name: 'Exam Coordinator' },
+  // { id: '3', name: 'Exam Coordinator' },
 ];
 
 const LecturerEntry = () => {
@@ -31,9 +32,8 @@ const LecturerEntry = () => {
           }
 
           const user = await response.json();
-          console.log('User details:', user);
-          if(user.role!='admin') {
-            navigate('/')
+          if (user.role !== 'admin') {
+            navigate('/');
           }
         } catch (error) {
           console.error('Error validating token:', error);
@@ -81,45 +81,47 @@ const LecturerEntry = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="lecturer-container">
       <h2>Lecturer Entry</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input
-        type="text"
-        name="firstName"
-        value={lecturer.firstName}
-        onChange={handleChange}
-        placeholder="First Name"
-        required
-      />
-      <input
-        type="text"
-        name="lastName"
-        value={lecturer.lastName}
-        onChange={handleChange}
-        placeholder="Last Name"
-        required
-      />
-      <input
-        type="text"
-        name="lecturerId"
-        value={lecturer.lecturerId}
-        onChange={handleChange}
-        placeholder="Lecturer ID"
-        required
-      />
-      <select name="role" value={lecturer.role} onChange={handleChange} required>
-        <option value="">Select Role</option>
-        {predefinedRoles.map(role => (
-          <option key={role.id} value={role.name}>
-            {role.name}
-          </option>
-        ))}
-      </select>
-      <button type="submit" disabled={loading}>
-        {loading ? 'Adding Lecturer...' : 'Add Lecturer'}
-      </button>
-    </form>
+      <form onSubmit={handleSubmit} className="lecturer-form">
+        {error && <p className="error-message">{error}</p>}
+        <input
+          type="text"
+          name="firstName"
+          value={lecturer.firstName}
+          onChange={handleChange}
+          placeholder="First Name"
+          required
+        />
+        <input
+          type="text"
+          name="lastName"
+          value={lecturer.lastName}
+          onChange={handleChange}
+          placeholder="Last Name"
+          required
+        />
+        <input
+          type="text"
+          name="lecturerId"
+          value={lecturer.lecturerId}
+          onChange={handleChange}
+          placeholder="Lecturer ID"
+          required
+        />
+        <select name="role" value={lecturer.role} onChange={handleChange} required>
+          <option value="">Select Role</option>
+          {predefinedRoles.map(role => (
+            <option key={role.id} value={role.name}>
+              {role.name}
+            </option>
+          ))}
+        </select>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Adding Lecturer...' : 'Add Lecturer'}
+        </button>
+      </form>
+    </div>
   );
 };
 
