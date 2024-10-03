@@ -12,5 +12,6 @@ const scoreSchema = new mongoose.Schema({
   scores: [subjectScoreSchema],  // Array of subject scores
 });
 
-const Score = mongoose.model('Score', scoreSchema);
+const Score = mongoose.models.Score || mongoose.model('Score', scoreSchema);
+// const Score = mongoose.model('Score', scoreSchema);
 export default Score;

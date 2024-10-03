@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './StudentEntry.css';
 
 const StudentEntry = () => {
-  const [student, setStudent] = useState({ firstName: '', lastName: '', studentId: '', semester: '', department: '' });
+  const [student, setStudent] = useState({ firstName: '', lastName: '', studentId: '', semester: '', department: '', photo: null });
   const [semesters, setSemesters] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const navigate = useNavigate();
@@ -70,32 +70,48 @@ const StudentEntry = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setStudent((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+    if (name === 'photo') {
+      setStudent((prevState) => ({
+        ...prevState,
+        photo: files[0], // For file input
+      }));
+    } else {
+      setStudent((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
 
-    if (name === 'semester') {
-      fetchSubjectsForSemester(value);
+      if (name === 'semester') {
+        fetchSubjectsForSemester(value);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const selectedSubjects = subjects.map((subject) => subject._id);
+
+    const formData = new FormData();
+    formData.append('firstName', student.firstName);
+    formData.append('lastName', student.lastName);
+    formData.append('studentId', student.studentId);
+    formData.append('semester', student.semester);
+    formData.append('department', student.department);
+    formData.append('photo', student.photo); // Append photo
+    subjects.forEach((subject, index) => {
+      formData.append(`subjects[${index}]`, subject._id);
+    });
+
     try {
       const response = await fetch('http://localhost:3000/api/students', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...student, subjects: selectedSubjects }),
+        body: formData, // Use formData for file uploads
       });
+
       if (!response.ok) {
         throw new Error('Failed to create student');
       }
-      setStudent({ firstName: '', lastName: '', studentId: '', semester: '', department: '' });
+      setStudent({ firstName: '', lastName: '', studentId: '', semester: '', department: '', photo: null });
       setSubjects([]);
     } catch (error) {
       console.error('Error:', error);
@@ -136,6 +152,10 @@ const StudentEntry = () => {
             </option>
           ))}
         </select>
+      </div>
+      <div className="form-group">
+        <label>Photo</label>
+        <input type="file" name="photo" accept="image/*" onChange={handleChange} />
       </div>
       <button type="submit">Add Student</button>
     </form>

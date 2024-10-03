@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import SubjectForm from './SubjectForm.jsx';
 import SubjectList from './SubjectList.jsx';
-import './SubjectManagement.css'
+import './SubjectManagement.css';
+
 const SubjectManagement = () => {
   const [subjects, setSubjects] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -25,7 +26,9 @@ const SubjectManagement = () => {
   const handleSaveSubject = async (subject) => {
     try {
       const method = selectedSubject ? 'PATCH' : 'POST';
-      const url = selectedSubject ? `http://localhost:3000/api/subjects/${selectedSubject._id}` : 'http://localhost:3000/api/subjects';
+      const url = selectedSubject
+        ? `http://localhost:3000/api/subjects/${selectedSubject._id}`
+        : 'http://localhost:3000/api/subjects';
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -47,7 +50,10 @@ const SubjectManagement = () => {
 
   const handleDeleteSubject = async (subjectId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/subjects/${subjectId}`, { method: 'DELETE' });
+      const response = await fetch(
+        `http://localhost:3000/api/subjects/${subjectId}`,
+        { method: 'DELETE' }
+      );
       if (!response.ok) throw new Error('Failed to delete subject');
       fetchSubjects();
     } catch (error) {
@@ -60,6 +66,11 @@ const SubjectManagement = () => {
     setSelectedSubject(null);
   };
 
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedSubject(null);
+  };
+
   return (
     <div className="subject-management">
       <div className="box" onClick={toggleForm}>
@@ -67,11 +78,19 @@ const SubjectManagement = () => {
       </div>
       <div className="box">
         <h2>Subject List</h2>
-        <SubjectList subjects={subjects} onEdit={handleEditSubject} onDelete={handleDeleteSubject} />
+        <SubjectList
+          subjects={subjects}
+          onEdit={handleEditSubject}
+          onDelete={handleDeleteSubject}
+        />
       </div>
       {showForm && (
         <div className="form-container">
-          <SubjectForm onSave={handleSaveSubject} existingSubject={selectedSubject} />
+          <SubjectForm
+            onSave={handleSaveSubject}
+            existingSubject={selectedSubject}
+            onClose={handleCloseForm} // Pass the onClose prop
+          />
         </div>
       )}
     </div>

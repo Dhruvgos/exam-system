@@ -1,19 +1,51 @@
 import express from 'express';
-import Student from '../models/student.js'; // Adjust path as needed
+import multer from 'multer';
+import path from 'path';
+import Student from '../models/student.js';
 import Subject from '../models/subject.js';
 import Semester from '../models/semester.js';
+
 const router = express.Router();
-
 // Create a new student
-router.post('/', async (req, res) => {
-  try {
-    const { firstName, lastName, studentId, semester,department } = req.body;
+// router.post('/', async (req, res) => {
+//   try {
+//     const { firstName, lastName, studentId, semester,department } = req.body;
 
-    // Optional: Fetch subjects based on semester and department if needed
+//     // Optional: Fetch subjects based on semester and department if needed
+//     const subjects = await Subject.find({ semester });
+//     const subjectIds = subjects.map(subject => subject._id);
+
+//     const student = new Student({ firstName, lastName, studentId, semester, subjects ,department});
+//     await student.save();
+//     res.status(201).send(student);
+//   } catch (error) {
+//     console.error('Error creating student:', error);
+//     res.status(400).send({ error: 'Failed to create student', details: error.message });
+//   }
+// });
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Directory to store uploaded photos
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Save with a unique filename
+  },
+});
+const upload = multer({ storage });
+
+// Create a new student with a photo upload
+router.post('/', upload.single('photo'), async (req, res) => {
+  try {
+    const { firstName, lastName, studentId, semester, department } = req.body;
+    const photo = req.file ? req.file.path : null; // Save the file path
+
+    // Fetch subjects based on semester and department
     const subjects = await Subject.find({ semester });
     const subjectIds = subjects.map(subject => subject._id);
 
-    const student = new Student({ firstName, lastName, studentId, semester, subjects ,department});
+    const student = new Student({ firstName, lastName, studentId, semester, department, subjects, photo });
     await student.save();
     res.status(201).send(student);
   } catch (error) {
@@ -21,6 +53,8 @@ router.post('/', async (req, res) => {
     res.status(400).send({ error: 'Failed to create student', details: error.message });
   }
 });
+
+
 
 // Get all students
 router.get('/', async (req, res) => {

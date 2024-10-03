@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 import SubjectManagement from '../Subject_Management/Subject_management.jsx';
 import MarksEntryPage from '../Marks_Management/MarksEntryPage.jsx';
-
+import './TeacherDashboard.css'
 const TeacherDashboard = () => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -31,6 +33,10 @@ const TeacherDashboard = () => {
     fetchUser();
   }, []);
 
+  const handleBackToHome = () => {
+    navigate('/'); // Redirect to the home page
+  };
+
   // Conditional rendering based on user role
   if (user === null) {
     return <div>Loading...</div>; // Optional: Show a loading state
@@ -38,7 +44,8 @@ const TeacherDashboard = () => {
 
   return (
     <div>
-      {user.role === 'Academic Coordinator' ? <SubjectManagement /> : <MarksEntryPage/>}
+      <button onClick={handleBackToHome} className="back-button">Back to Home</button> {/* Back to Home Button */}
+      {user.role === 'Academic Coordinator' ? <SubjectManagement /> : <MarksEntryPage />}
     </div>
   );
 };

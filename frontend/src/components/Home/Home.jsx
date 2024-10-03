@@ -47,13 +47,18 @@ const Home = () => {
     navigate('/login');
   };
 
+  const handleBackToDashboard = () => {
+    navigate('/admin-dashboard'); // This navigates to the dashboard
+  };
+
   return (
     <div className="home-container">
       <h2>Welcome to the Home Page</h2>
       {isLoggedIn ? (
         <div className="button-group">
           <button onClick={handleLogout} className="button logout-button">Logout</button>
-          <button onClick={() => navigate('/admin-dashboard')} className="button dashboard-button">Go to Dashboard</button>
+          <button onClick={handleBackToDashboard} className="button dashboard-button">Go to Dashboard</button>
+          {/* <button onClick={handleBackToDashboard} className="button back-button">Back to Dashboard</button> Back Button */}
         </div>
       ) : (
         <button onClick={handleLoginClick} className="button login-button">Login</button>

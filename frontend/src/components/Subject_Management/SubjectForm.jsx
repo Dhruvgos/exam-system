@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import './SubjectForm.css'
-const SubjectForm = ({ onSave, existingSubject }) => {
+import './SubjectForm.css';
+
+const SubjectForm = ({ onSave, existingSubject, onClose }) => {
   const [subjectName, setSubjectName] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
   const [semester, setSemester] = useState('');
-  const [departments] = useState(['ENGINEERING', 'COMPUTER APPLICATIONS', 'SCIENCE']); // Available department options
-  const [selectedDepartment, setSelectedDepartment] = useState(''); // For the selected department
+  const [departments] = useState(['ENGINEERING', 'COMPUTER APPLICATIONS', 'SCIENCE']);
+  const [selectedDepartment, setSelectedDepartment] = useState('');
   const [units, setUnits] = useState([{ number: '', name: '', description: '' }]);
 
   useEffect(() => {
@@ -13,7 +14,7 @@ const SubjectForm = ({ onSave, existingSubject }) => {
       setSubjectName(existingSubject.name);
       setSubjectCode(existingSubject.subjectCode);
       setSemester(existingSubject.semester);
-      setSelectedDepartment(existingSubject.department); // Load the selected department
+      setSelectedDepartment(existingSubject.department);
       setUnits(existingSubject.units);
     }
   }, [existingSubject]);
@@ -104,6 +105,7 @@ const SubjectForm = ({ onSave, existingSubject }) => {
 
       <button type="button" onClick={handleAddUnit}>Add Unit</button>
       <button type="submit">Save Subject</button>
+      <button type="button" className="close-button" onClick={onClose}>Close Form</button> {/* Close button */}
     </form>
   );
 };

@@ -130,3 +130,41 @@ ul li button:hover {
     padding: 10px 20px;
   }
 }
+
+.results-table,
+.consolidated-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.results-table th,
+.results-table td,
+.consolidated-table th,
+.consolidated-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.results-table th,
+.consolidated-table th {
+  background-color: #6b4cd1;
+}
+
+.download-btn {
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.download-btn:hover {
+  background-color: #0056b3;
+}
+
+.student-details {
+  margin: 20px 0;
+}

@@ -8,7 +8,9 @@ const studentSchema = new mongoose.Schema({
   semester: { type: String,  required: true }, // Reference to Semester
   department: { type: String,  required: true }, 
   subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }], // Assigned subjects
+  photo: { type: String }, // Store the URL or path of the photo
 });
 
-const Student = mongoose.model('Student', studentSchema);
+const Student = mongoose.models.Student || mongoose.model('Student', studentSchema);
+// const Student = mongoose.model('Student', studentSchema);
 export default Student;
